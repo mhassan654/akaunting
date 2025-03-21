@@ -40,6 +40,8 @@ class Bills extends Export implements WithColumnFormatting
             'billed_at',
             'due_at',
             'amount',
+            'discount_type',
+            'discount_rate',
             'currency_code',
             'currency_rate',
             'category_name',
@@ -52,7 +54,11 @@ class Bills extends Export implements WithColumnFormatting
             'contact_state',
             'contact_zip_code',
             'contact_city',
+            'title',
+            'subheading',
             'notes',
+            'template',
+            'color',
             'parent_number'
         ];
     }

@@ -405,8 +405,12 @@ if (! function_exists('request_is_auth')) {
 }
 
 if (! function_exists('request_is_signed')) {
-    function request_is_signed(Request|null $request = null, int $company_id): bool
+    function request_is_signed(Request|null $request = null, int $company_id = null): bool
     {
+        if (is_null($company_id)) {
+            return false;
+        }
+
         $r = $request ?: request();
 
         return $r->is($company_id . '/signed/*');
@@ -414,10 +418,33 @@ if (! function_exists('request_is_signed')) {
 }
 
 if (! function_exists('request_is_portal')) {
-    function request_is_portal(Request|null $request = null, int $company_id): bool
+    function request_is_portal(Request|null $request = null, int $company_id = null): bool
     {
+        if (is_null($company_id)) {
+            return false;
+        }
+
         $r = $request ?: request();
 
         return $r->is($company_id . '/portal') || $r->is($company_id . '/portal/*');
+    }
+}
+
+if (! function_exists('calculation_to_quantity')) {
+    function calculation_to_quantity($quantity)
+    {
+        if (! preg_match('/^[0-9+\-x*\/().\s]+$/', $quantity)) {
+            throw new \InvalidArgumentException('Invalid mathematical expression.');
+        }
+
+        $quantity = Str::replace('x', '*', $quantity);
+
+        try {
+            $result = eval('return ' . $quantity . ';');
+        } catch (\Throwable $e) {
+            throw new \InvalidArgumentException('Error evaluating the expression: ' . $e->getMessage());
+        }
+
+        return $result;
     }
 }

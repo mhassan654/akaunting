@@ -40,6 +40,8 @@ class RecurringBills extends Export implements WithColumnFormatting, WithParentS
             'billed_at',
             'due_at',
             'amount',
+            'discount_type',
+            'discount_rate',
             'currency_code',
             'currency_rate',
             'category_name',
@@ -52,7 +54,11 @@ class RecurringBills extends Export implements WithColumnFormatting, WithParentS
             'contact_state',
             'contact_zip_code',
             'contact_city',
+            'title',
+            'subheading',
             'notes',
+            'template',
+            'color',
         ];
     }
 

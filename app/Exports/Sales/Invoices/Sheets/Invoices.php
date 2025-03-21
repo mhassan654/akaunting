@@ -40,6 +40,8 @@ class Invoices extends Export implements WithColumnFormatting
             'invoiced_at',
             'due_at',
             'amount',
+            'discount_type',
+            'discount_rate',
             'currency_code',
             'currency_rate',
             'category_name',
@@ -52,8 +54,12 @@ class Invoices extends Export implements WithColumnFormatting
             'contact_state',
             'contact_zip_code',
             'contact_city',
+            'title',
+            'subheading',
             'notes',
             'footer',
+            'template',
+            'color',
             'parent_number',
         ];
     }

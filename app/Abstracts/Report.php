@@ -251,17 +251,17 @@ abstract class Report
 
     public function show()
     {
-        return view($this->views['show'])->with('class', $this);
+        return view($this->views['show'], ['print' => false])->with('class', $this);
     }
 
     public function print()
     {
-        return view($this->views['print'])->with('class', $this);
+        return view($this->views['print'], ['print' => true])->with('class', $this);
     }
 
     public function pdf()
     {
-        $view = view($this->views['print'])->with('class', $this)->render();
+        $view = view($this->views['print'], ['print' => true])->with('class', $this)->render();
 
         $html = mb_convert_encoding($view, 'HTML-ENTITIES', 'UTF-8');
 

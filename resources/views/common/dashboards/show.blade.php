@@ -49,6 +49,12 @@
                         </span>
                     </x-slot>
 
+                    @can('update-common-dashboards')
+                        <x-dropdown.link href="{{ route('dashboards.edit', $dashboard->id) }}" id="show-more-actions-edit-dashboard-{{ $dashboard->id }}">
+                            {{ trans('general.edit') }}
+                        </x-dropdown.link>
+                    @endcan
+
                     @can('delete-common-dashboards')
                         <x-delete-link :model="$dashboard" :route="'dashboards.destroy'" />
 
@@ -106,31 +112,35 @@
     @endsection
 
     <x-slot name="content">
-        <div class="justify-between items-start border-b pt-8 grid sm:grid-cols-12">
-            <div class="space-x-10 col-span-9 -mx-8">
-                <x-tabs active="show-dashboard-switch-{{ $dashboard->id }}" class="mt-1">
-                    <x-slot name="navs">
+        <div class="flex flex-col lg:flex-row justify-between items-start border-b pt-8">
+            <div class="flex">
+                @if ($user_dashboards->count() > 1)
+                    <button type="button" id="dashboard-left" disabled="disabled" class="material-icons-outlined text-purple-200 bg-body -mr-3 mr-1">chevron_left</button>
+
+                    <div id="dashboard-slider" class="flex space-x-10 overflow-scroll hide-scroll-bar">
                         @foreach ($user_dashboards as $user_dashboard)
                             <li 
-                                class="relative flex-auto px-4 text-sm text-center pb-2 cursor-pointer transition-all whitespace-nowrap tabs-link"
                                 id="show-dashboard-switch-{{ $user_dashboard->id }}"
-                                data-id="show-dashboard-switch-{{ $user_dashboard->id }}"
-                                data-tabs="{{ $user_dashboard->id }}"
-                                data-tabs-slide
+                                class="relative flex-auto px-2 text-sm text-center pb-2 pt-1 cursor-pointer transition-all whitespace-nowrap list-none tabs-link"
                                 x-bind:class="active != 'show-dashboard-switch-{{ $user_dashboard->id }}' ? 'text-black' : 'active-tabs text-purple border-purple transition-all after:absolute after:w-full after:h-0.5 after:left-0 after:right-0 after:bottom-0 after:bg-purple after:rounded-tl-md after:rounded-tr-md'"
+                                @if ($loop->first)
+                                style="margin-left:0px !important;"
+                                @else
+                                style="margin-left:10px !important;"
+                                @endif
                             >
                                 <a href="{{ route('dashboards.switch', $user_dashboard->id) }}">
                                     {{ $user_dashboard->name }}
                                 </a>
                             </li>
                         @endforeach
-                    </x-slot>
+                    </div>
 
-                    <x-slot name="content"></x-slot>
-                </x-tabs>
+                    <button type="button" id="dashboard-right" class="material-icons-outlined text-purple bg-body ml-1 mr-1">chevron_right</button>
+                @endif
             </div>
 
-            <div class="col-span-3 ml-6 text-right">
+            <div class="flex col-span-3 ml-6 text-right">
                 @can('create-common-widgets')
                     <x-button
                         type="button"
@@ -145,7 +155,7 @@
                 @endcan
 
                 @can('create-common-dashboards')
-                    <x-link href="{{ route('dashboards.create') }}" override="class" class="relative flex-auto px-3 pb-2.5 h-8 text-purple text-sm font-medium tabs-link" id="show-more-actions-new-dashboard">
+                    <x-link href="{{ route('dashboards.create') }}" override="class" class="relative flex-auto px-3 pb-2.5 pt-1 h-8 text-purple text-sm font-medium tabs-link" id="show-more-actions-new-dashboard">
                         {{ trans('general.title.new', ['type' => trans_choice('general.dashboards', 1)]) }}
                     </x-link>
                 @endcan
